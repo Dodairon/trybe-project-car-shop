@@ -14,4 +14,9 @@ function getCarById(id: string) {
   return carModel.findById(id);
 }
 
-export default { postCar, getAllCars, getCarById };
+function updateCar(id: string, car: Car) {
+  CarSchema.parse(car);
+  return carModel.findByIdAndUpdate(id, car);
+}
+
+export default { postCar, getAllCars, getCarById, updateCar };

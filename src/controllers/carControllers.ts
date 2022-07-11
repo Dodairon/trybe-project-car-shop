@@ -31,8 +31,21 @@ const getCarByIdController: RequestHandler = async (req, res) => {
   }
 };
 
+const updateCarController: RequestHandler = async (req, res) => {
+  try {
+    const car = await carService.updateCar(req.params.id, req.body);
+    if (!car) {
+      return res.status(404).json({ error: 'Object not found' });
+    }
+    return res.status(200).json(car);
+  } catch (error) {
+    return res.status(400).json({ message: (error as Error).message });
+  }
+};
+
 export default {
   postCarController,
   getAllCarsController,
   getCarByIdController,
+  updateCarController,
 };

@@ -7,5 +7,6 @@ const carRoute = Router();
 carRoute.post('/cars', carControllers.postCarController);
 carRoute.get('/cars', carControllers.getAllCarsController);
 carRoute.get('/cars/:id', carMidd, carControllers.getCarByIdController);
+carRoute.put('/cars/:id', carMidd, carControllers.updateCarController);
 
 export default carRoute;
