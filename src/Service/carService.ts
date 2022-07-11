@@ -19,4 +19,8 @@ function updateCar(id: string, car: Car) {
   return carModel.findByIdAndUpdate(id, car);
 }
 
-export default { postCar, getAllCars, getCarById, updateCar };
+function deleteCar(id: string) {
+  return carModel.findByIdAndDelete(id);
+}
+
+export default { postCar, getAllCars, getCarById, updateCar, deleteCar };
