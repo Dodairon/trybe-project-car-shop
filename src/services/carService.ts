@@ -1,4 +1,4 @@
-import carModel from '../Model/carModel';
+import carModel from '../models/carModel';
 import { CarSchema, Car } from '../interfaces/CarInterface';
 
 function postCar(car: Car) {
@@ -23,4 +23,4 @@ function deleteCar(id: string) {
   return carModel.findByIdAndDelete(id);
 }
 
-export default { postCar, getAllCars, getCarById, updateCar, deleteCar };
+export { postCar, getAllCars, getCarById, updateCar, deleteCar };
