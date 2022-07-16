@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import { Model } from "mongoose";
 import sinon, { SinonStub } from "sinon";
+
 import {
   postCar,
   getAllCars,
@@ -9,60 +10,44 @@ import {
   deleteCar,
 } from "../../../services/carService";
 
+const unoComEscada = {
+  model: "Uno Com Escada",
+  year: 2020,
+  color: "azul bebe",
+  buyValue: 2,
+  doorsQty: 2,
+  seatsQty: 4,
+  _id: "yuidsgfyudsgfasduiy12313",
+};
+
+const unoDeFirma = {
+  model: "Uno de Firma",
+  year: 2020,
+  color: "Rosa Choque",
+  buyValue: 2,
+  doorsQty: 2,
+  seatsQty: 4,
+  _id: "yuidsgfyudsgfasduiy12313",
+};
+
 describe("CarService", () => {
   describe("Create Car", () => {
     before(() => {
-      sinon.stub(Model, "create").resolves({
-        model: "Uno Com Escada",
-        year: 2020,
-        color: "azul bebe",
-        buyValue: 2,
-        doorsQty: 2,
-        seatsQty: 4,
-        _id: "yuidsgfyudsgfasduiy12313",
-        sorriso: "aparente",
-      });
+      sinon.stub(Model, "create").resolves(unoComEscada);
     });
 
     after(() => {
       (Model.create as SinonStub).restore();
     });
     it("create Car", async () => {
-      const result = await postCar({
-        model: "Uno Com Escada",
-        year: 2020,
-        color: "azul bebe",
-        buyValue: 2,
-        doorsQty: 2,
-        seatsQty: 4,
-      });
-
-      expect(result).to.be.deep.equal({
-        model: "Uno Com Escada",
-        year: 2020,
-        color: "azul bebe",
-        buyValue: 2,
-        doorsQty: 2,
-        seatsQty: 4,
-        _id: "yuidsgfyudsgfasduiy12313",
-        sorriso: "aparente",
-      });
+      const result = await postCar(unoComEscada);
+      expect(result).to.be.deep.equal(unoComEscada);
     });
   });
 
   describe("get all cars", () => {
     before(() => {
-      sinon.stub(Model, "find").resolves([
-        {
-          _id: "yuidsgfyudsgfasduiy12313",
-          model: "Uno Com Escada",
-          year: 2020,
-          color: "azul bebe",
-          buyValue: 2,
-          doorsQty: 2,
-          seatsQty: 4,
-        },
-      ]);
+      sinon.stub(Model, "find").resolves([unoComEscada]);
     });
 
     after(() => {
@@ -71,70 +56,28 @@ describe("CarService", () => {
     it("return cars", async () => {
       const result = await getAllCars();
 
-      expect(result).to.be.deep.equal([
-        {
-          _id: "yuidsgfyudsgfasduiy12313",
-          model: "Uno Com Escada",
-          year: 2020,
-          color: "azul bebe",
-          buyValue: 2,
-          doorsQty: 2,
-          seatsQty: 4,
-        },
-      ]);
+      expect(result).to.be.deep.equal([unoComEscada]);
     });
   });
 
   describe("get car by id", () => {
+    before(() => {
+      sinon.stub(Model, "findOne").resolves(unoComEscada);
+    });
     after(() => {
       (Model.findOne as SinonStub).restore();
     });
     it("return car by id", async () => {
-      sinon.stub(Model, "findOne").resolves({
-        model: "Uno Com Escada",
-        year: 2020,
-        color: "azul bebe",
-        buyValue: 2,
-        doorsQty: 2,
-        seatsQty: 4,
-        _id: "yuidsgfyudsgfasduiy12313",
-        sorriso: "aparente",
-      });
-      const result = await getCarById("62c87efaf1f9d111bf4b6acc");
+      const result = await getCarById("yuidsgfyudsgfasduiy12313");
 
-      expect(result).to.be.deep.equal({
-        model: "Uno Com Escada",
-        year: 2020,
-        color: "azul bebe",
-        buyValue: 2,
-        doorsQty: 2,
-        seatsQty: 4,
-        _id: "yuidsgfyudsgfasduiy12313",
-        sorriso: "aparente",
-      });
+      expect(result).to.be.deep.equal(unoComEscada);
     });
   });
 
   describe("update a Car", () => {
     before(() => {
-      sinon.stub(Model, "findByIdAndUpdate").resolves({
-        _id: "yuidsgfyudsgfasduiy12313",
-        model: "Uno de Firma",
-        year: 2020,
-        color: "Rosa Choque",
-        buyValue: 2,
-        doorsQty: 2,
-        seatsQty: 4,
-      });
-      sinon.stub(Model, "findById").resolves({
-        _id: "yuidsgfyudsgfasduiy12313",
-        model: "Uno de Firma",
-        year: 2020,
-        color: "Rosa Choque",
-        buyValue: 2,
-        doorsQty: 2,
-        seatsQty: 4,
-      });
+      sinon.stub(Model, "findByIdAndUpdate").resolves(unoDeFirma);
+      sinon.stub(Model, "findById").resolves(unoDeFirma);
     });
 
     after(() => {
@@ -142,47 +85,16 @@ describe("CarService", () => {
       (Model.findById as SinonStub).restore();
     });
     it("update", async () => {
-      const result = await updateCar("yuidsgfyudsgfasduiy12313", {
-        model: "Uno de Firma",
-        year: 2020,
-        color: "Rosa Choque",
-        buyValue: 2,
-        doorsQty: 2,
-        seatsQty: 4,
-      });
+      const result = await updateCar("yuidsgfyudsgfasduiy12313", unoDeFirma);
 
-      expect(result).to.be.deep.equal({
-        _id: "yuidsgfyudsgfasduiy12313",
-        model: "Uno de Firma",
-        year: 2020,
-        color: "Rosa Choque",
-        buyValue: 2,
-        doorsQty: 2,
-        seatsQty: 4,
-      });
+      expect(result).to.be.deep.equal(unoDeFirma);
     });
   });
 
   describe("delete Car", () => {
     before(() => {
-      sinon.stub(Model, "findOneAndDelete").resolves({
-        _id: "yuidsgfyudsgfasduiy12313",
-        model: "Uno de Firma",
-        year: 2020,
-        color: "Rosa Choque",
-        buyValue: 2,
-        doorsQty: 2,
-        seatsQty: 4,
-      });
-      sinon.stub(Model, "findById").resolves({
-        _id: "yuidsgfyudsgfasduiy12313",
-        model: "Uno de Firma",
-        year: 2020,
-        color: "Rosa Choque",
-        buyValue: 2,
-        doorsQty: 2,
-        seatsQty: 4,
-      });
+      sinon.stub(Model, "findOneAndDelete").resolves(unoDeFirma);
+      sinon.stub(Model, "findById").resolves(unoDeFirma);
     });
 
     after(() => {
@@ -192,15 +104,7 @@ describe("CarService", () => {
     it("delete car", async () => {
       const result = await deleteCar("yuidsgfyudsgfasduiy12313");
 
-      expect(result).to.be.deep.equal({
-        _id: "yuidsgfyudsgfasduiy12313",
-        buyValue: 2,
-        color: "Rosa Choque",
-        doorsQty: 2,
-        model: "Uno de Firma",
-        seatsQty: 4,
-        year: 2020,
-      });
+      expect(result).to.be.deep.equal(unoDeFirma);
     });
   });
 });
